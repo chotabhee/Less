@@ -1,43 +1,27 @@
-/* =========================================================
-   🚀 LESS. PLATFORM - REAL DATA FILE (NATIVE MP4)
-   ========================================================= */
-
 const systemData = [
     {
         id: 1,
         category: "shorts", 
-        title: "Paimon OP Edit",
-        desc: "Lightning fast native video player test.",
-        
-        // --- 📺 YOUTUBE AD ---
+        title: "Exclusive Edit 1",
+        desc: "PaimonHindi Mega Edit - Direct MP4 Catbox",
         ytAdId: "T0VyWKXz0Ow", 
         adTime: 5, 
-        
-        // 🔥 AAPKA NAYA CATBOX DIRECT MP4 LINK 🔥
         originalUrl: "https://files.catbox.moe/4w5ct3.mp4", 
-        
-        // --- 👤 REAL PROFILE INFO ---
         actorId: "paimon_hindi",
         actorName: "PaimonHindi",
-        actorBio: "Gaming & Anime edits. Subscribe to my YT channel!",
-        actorPic: "https://i.pravatar.cc/150?u=paimon", // Apni asli YouTube DP ka link yahan daal dena
+        actorPic: "https://i.pravatar.cc/150?u=paimon",
         thumbnail: "https://images.unsplash.com/photo-1536440136628?w=300" 
     },
     {
         id: 2,
-        category: "shorts", 
-        title: "Exclusive Edit 2",
-        desc: "Scroll to watch more native videos.",
-        
+        category: "movie", 
+        title: "Premium Movie",
+        desc: "Watch full movie after short ad.",
         ytAdId: "T0VyWKXz0Ow", 
         adTime: 5, 
-        
-        // Ek aur test link (Aap ise aage change kar sakte ho)
         originalUrl: "https://files.catbox.moe/4w5ct3.mp4", 
-        
         actorId: "paimon_hindi",
         actorName: "PaimonHindi",
-        actorBio: "Gaming & Anime edits. Subscribe to my YT channel!",
         actorPic: "https://i.pravatar.cc/150?u=paimon",
         thumbnail: "https://images.unsplash.com/photo-1534528741775?w=300"
     }
