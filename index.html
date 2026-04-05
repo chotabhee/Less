@@ -3,12 +3,10 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>less. | Pure Entertainment</title>
-    
+    <title>less. | Entertainment</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;900&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="stylesheet" href="style.css">
-
     <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-auth.js"></script>
 </head>
@@ -23,18 +21,15 @@
             <h3>Profile</h3>
             <button onclick="closeSidebars()" class="close-btn"><i class="fa-solid fa-xmark"></i></button>
         </div>
-        
         <div class="auth-section">
             <div id="loggedOutUI">
                 <i class="fa-solid fa-user-circle" style="font-size: 60px; color: #444; margin-bottom: 15px;"></i>
-                <p>Login to save your favorites.</p>
                 <button class="google-login-btn" onclick="signInWithGoogle()"><i class="fa-brands fa-google"></i> Login with Google</button>
             </div>
-
             <div id="loggedInUI" style="display: none;">
                 <img id="userGooglePic" src="" alt="User" class="google-profile-pic">
-                <h3 id="userGoogleName">User Name</h3>
-                <button class="google-logout-btn" onclick="signOut()"><i class="fa-solid fa-right-from-bracket"></i> Logout</button>
+                <h3 id="userGoogleName">User</h3>
+                <button class="google-logout-btn" onclick="signOut()">Logout</button>
             </div>
         </div>
     </div>
@@ -42,13 +37,12 @@
     <div id="rightMoviesSidebar" class="sidebar right-sidebar">
         <div class="sidebar-header">
             <button onclick="closeSidebars()" class="close-btn"><i class="fa-solid fa-arrow-left"></i></button>
-            <h3>MOVIE CATALOGUE</h3>
+            <h3>MOVIES</h3>
         </div>
         <div class="video-grid" id="moviesCatalogueGrid"></div>
     </div>
 
     <div id="sidebarOverlay" onclick="closeSidebars()"></div>
-
     <div class="less-feed" id="mainFeed"></div>
 
     <script src="data.js"></script> 
