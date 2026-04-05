@@ -29,6 +29,7 @@ auth.onAuthStateChanged((user) => {
 function signInWithGoogle() { auth.signInWithPopup(provider).catch(e => alert(e.message)); }
 function signOut() { auth.signOut(); }
 
+
 /* =========================================
    2. ENGINE CORE & DATA LOAD
    ========================================= */
@@ -36,24 +37,25 @@ let videoList = [...systemData];
 videoList.sort(() => Math.random() - 0.5); 
 
 const feed = document.getElementById('mainFeed');
-const state = {};   
+const state = {}; // Isme har video ka data alag save hoga
 
 function renderFeed() {
     feed.innerHTML = '';
     videoList.forEach((vid) => {
-        state[vid.id] = { adWatched: false }; 
+        // Har video ko apna personal timer de rahe hain
+        state[vid.id] = { adWatched: false, timerInterval: null }; 
+        
         const reel = document.createElement('div');
         reel.className = `reel`;
         reel.dataset.id = vid.id;
         
         reel.innerHTML = `
             <div class="layer active-layer" id="ad-layer-${vid.id}">
-                <iframe id="yt-frame-${vid.id}" src="https://www.youtube.com/embed/${vid.ytAdId}?autoplay=0&controls=0&modestbranding=1&rel=0&mute=1&enablejsapi=1" allow="autoplay"></iframe>
+                <iframe id="yt-frame-${vid.id}" src="" frameborder="0" style="width:100%; height:100%; pointer-events:none;"></iframe>
             </div>
-            <div class="layer" id="main-layer-${vid.id}" onclick="togglePlayPause('player-${vid.id}')">
-                <video id="player-${vid.id}" playsinline loop crossorigin>
-                    <source src="${vid.originalUrl}" type="video/mp4">
-                </video>
+            
+            <div class="layer" id="main-layer-${vid.id}">
+                <iframe id="player-${vid.id}" src="" frameborder="0" allowfullscreen style="width:100%; height:100%;"></iframe>
             </div>
             
             <div class="ad-timer" id="timer-${vid.id}">Ad: ${vid.adTime}s</div>
@@ -64,7 +66,7 @@ function renderFeed() {
             </div>
             
             <div class="side-actions">
-                <div class="actor-profile-btn"><img src="${vid.actorPic}" alt="Actor"></div>
+                <div class="actor-profile-btn"><img src="${vid.actorPic}" alt="Profile"></div>
                 <div class="action-item" onclick="toggleLike(this)"><i class="fa-solid fa-heart action-icon"></i><span class="action-text">Like</span></div>
                 <div class="action-item"><i class="fa-solid fa-plus action-icon"></i><span class="action-text">List</span></div>
                 <div class="action-item"><i class="fa-solid fa-share action-icon"></i><span class="action-text">Share</span></div>
@@ -76,16 +78,11 @@ function renderFeed() {
 }
 renderFeed();
 
-function togglePlayPause(playerId) {
-    const video = document.getElementById(playerId);
-    if(video.paused) video.play(); else video.pause();
-}
 
 /* =========================================
-   3. AD LOGIC & SWIPE LOCK
+   3. AD LOGIC & TIMER (100% FIXED)
    ========================================= */
 function observeVideos() {
-    let activeInterval = null;
     const observer = new IntersectionObserver((entries) => {
         entries.forEach(entry => {
             const vidId = entry.target.dataset.id;
@@ -94,45 +91,73 @@ function observeVideos() {
             const mainLayer = document.getElementById(`main-layer-${vidId}`);
             const ytFrame = document.getElementById(`yt-frame-${vidId}`);
             const timerEl = document.getElementById(`timer-${vidId}`);
-            const nativePlayer = document.getElementById(`player-${vidId}`);
+            const sendvidPlayer = document.getElementById(`player-${vidId}`);
 
             if (entry.isIntersecting) {
+                // AGAR VIDEO SAAMNE AAYI HAI
                 if (!state[vidId].adWatched) {
-                    feed.style.overflowY = 'hidden'; // Lock Scroll
+                    // 1. Swipe Lock karo
+                    feed.style.overflowY = 'hidden'; 
+                    
+                    // 2. YT Ad start karo (Full mute & autoplay features ke sath)
                     timerEl.style.display = 'block';
-                    ytFrame.src = ytFrame.src.replace('autoplay=0', 'autoplay=1');
+                    ytFrame.src = `https://www.youtube.com/embed/${data.ytAdId}?autoplay=1&controls=0&modestbranding=1&rel=0&mute=1&playsinline=1`;
+                    
                     let timeLeft = data.adTime;
                     timerEl.innerText = `Ad: ${timeLeft}s`;
 
-                    activeInterval = setInterval(() => {
-                        timeLeft--; timerEl.innerText = `Ad: ${timeLeft}s`;
+                    // 3. Purana timer clear karo (safety ke liye)
+                    if(state[vidId].timerInterval) clearInterval(state[vidId].timerInterval);
+
+                    // 4. Sirf isi video ka timer start karo
+                    state[vidId].timerInterval = setInterval(() => {
+                        timeLeft--;
+                        if(timerEl) timerEl.innerText = `Ad: ${timeLeft}s`;
+                        
                         if (timeLeft <= 0) {
-                            clearInterval(activeInterval);
+                            // AD KHATAM HO GAYA!
+                            clearInterval(state[vidId].timerInterval);
                             timerEl.style.display = 'none';
-                            ytFrame.src = ""; 
+                            ytFrame.src = ""; // Ad hatao
                             state[vidId].adWatched = true; 
-                            feed.style.overflowY = 'scroll'; // Unlock Scroll
+                            
+                            // Swipe Unlock karo
+                            feed.style.overflowY = 'scroll'; 
+                            
+                            // Sendvid chalu karo
                             adLayer.classList.remove('active-layer');
                             mainLayer.classList.add('active-layer');
-                            nativePlayer.play();
+                            sendvidPlayer.src = data.originalUrl; 
                         }
                     }, 1000);
                 } else {
+                    // AD PEHLE HI DEKH LIYA HAI
                     mainLayer.classList.add('active-layer');
-                    nativePlayer.play();
+                    if(sendvidPlayer.src === "") sendvidPlayer.src = data.originalUrl;
                 }
             } else {
-                if (activeInterval) clearInterval(activeInterval); 
-                nativePlayer.pause(); 
-                if (!state[vidId].adWatched && ytFrame.src.includes('autoplay=1')) {
-                     ytFrame.src = ytFrame.src.replace('autoplay=1', 'autoplay=0'); 
-                     feed.style.overflowY = 'scroll';
+                // AGAR SCROLL KARKE AAGE NIKAL GAYE
+                
+                // 1. Us video ka timer turant rok do
+                if (state[vidId].timerInterval) {
+                    clearInterval(state[vidId].timerInterval);
+                }
+                
+                // 2. Video rok do (Background awaz band)
+                sendvidPlayer.src = ""; 
+                
+                // 3. Agar ad poora nahi hua tha, toh YouTube bhi rok do aur swipe khol do
+                if (!state[vidId].adWatched) {
+                     ytFrame.src = ""; 
+                     feed.style.overflowY = 'scroll'; 
                 }
             }
         });
     }, { threshold: 0.7 });
+    
     document.querySelectorAll('.reel').forEach(r => observer.observe(r));
 }
+
 
 /* =========================================
    4. MAGIC SWIPE GESTURES (LEFT & RIGHT)
@@ -149,20 +174,14 @@ document.addEventListener('touchend', e => {
     
     // Swipe Right se Left (👈) -> Open Movies
     if (swipeDistance < -50) {
-        if (leftSidebar.classList.contains('open')) {
-            closeSidebars(); // Agar profile khuli hai to pehle use band karega
-        } else if (!rightSidebar.classList.contains('open')) {
-            openMoviesList(); // Agar kuch nahi khula to Movies open karega
-        }
+        if (leftSidebar.classList.contains('open')) closeSidebars(); 
+        else if (!rightSidebar.classList.contains('open')) openMoviesList(); 
     }
     
     // Swipe Left se Right (👉) -> SWIPE BACK (Close Movies) OR Open Profile
     if (swipeDistance > 50) { 
-        if (rightSidebar.classList.contains('open')) {
-            closeSidebars(); // SWIPE BACK: Movies band hoke wapas Shorts aa jayenge
-        } else if (!leftSidebar.classList.contains('open')) {
-            toggleLeftMenu(); // Profile menu open karega
-        }
+        if (rightSidebar.classList.contains('open')) closeSidebars(); 
+        else if (!leftSidebar.classList.contains('open')) toggleLeftMenu(); 
     }
 });
 
