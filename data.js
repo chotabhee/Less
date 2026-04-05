@@ -1,42 +1,43 @@
 /* =========================================================
-   🚀 LESS. PLATFORM CONTROL ROOM (DATA FILE)
+   🚀 LESS. PLATFORM - REAL DATA FILE (NATIVE MP4)
    ========================================================= */
 
 const systemData = [
     {
         id: 1,
         category: "shorts", 
-        title: "Exclusive Edit 1",
-        desc: "Aapki pehli Sendvid video.",
+        title: "Paimon OP Edit",
+        desc: "Lightning fast native video player test.",
         
-        // Aapka YouTube Shorts Ad ID
+        // --- 📺 YOUTUBE AD ---
         ytAdId: "T0VyWKXz0Ow", 
-        adTime: 5, // 5 second ka Ad
+        adTime: 5, 
         
-        // 🔥 AAPKA PEHLA SENDVID LINK (Embed Format Me)
-        originalUrl: "https://sendvid.com/embed/7fv3zl41", 
+        // 🔥 AAPKA NAYA CATBOX DIRECT MP4 LINK 🔥
+        originalUrl: "https://files.catbox.moe/4w5ct3.mp4", 
         
-        actorId: "actor_1", 
+        // --- 👤 REAL PROFILE INFO ---
+        actorId: "paimon_hindi",
         actorName: "PaimonHindi",
-        actorBio: "Gaming Creator & Editor. Subscribe for more!",
-        actorPic: "https://i.pravatar.cc/150?u=paimon", 
+        actorBio: "Gaming & Anime edits. Subscribe to my YT channel!",
+        actorPic: "https://i.pravatar.cc/150?u=paimon", // Apni asli YouTube DP ka link yahan daal dena
         thumbnail: "https://images.unsplash.com/photo-1536440136628?w=300" 
     },
     {
         id: 2,
         category: "shorts", 
         title: "Exclusive Edit 2",
-        desc: "Aapki dusri Sendvid video.",
+        desc: "Scroll to watch more native videos.",
         
         ytAdId: "T0VyWKXz0Ow", 
         adTime: 5, 
         
-        // 🔥 AAPKA DUSRA SENDVID LINK (Embed Format Me)
-        originalUrl: "https://sendvid.com/embed/rwcor9fi", 
+        // Ek aur test link (Aap ise aage change kar sakte ho)
+        originalUrl: "https://files.catbox.moe/4w5ct3.mp4", 
         
-        actorId: "actor_1", 
+        actorId: "paimon_hindi",
         actorName: "PaimonHindi",
-        actorBio: "Gaming Creator & Editor. Subscribe for more!",
+        actorBio: "Gaming & Anime edits. Subscribe to my YT channel!",
         actorPic: "https://i.pravatar.cc/150?u=paimon",
         thumbnail: "https://images.unsplash.com/photo-1534528741775?w=300"
     }
