@@ -3,10 +3,13 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>less. | Entertainment</title>
+    <title>less. | Premium OTT</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;900&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <link rel="stylesheet" href="https://cdn.plyr.io/3.7.8/plyr.css" />
     <link rel="stylesheet" href="style.css">
+
     <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-auth.js"></script>
 </head>
@@ -14,6 +17,9 @@
 
     <div class="top-nav">
         <div class="brand-logo" onclick="toggleLeftMenu()">less<span>.</span></div>
+        <div class="nav-right">
+            <button class="nav-btn" onclick="openMoviesList()"><i class="fa-solid fa-film"></i> Movies</button>
+        </div>
     </div>
 
     <div id="leftSidebar" class="sidebar left-sidebar">
@@ -39,13 +45,82 @@
             <button onclick="closeSidebars()" class="close-btn"><i class="fa-solid fa-arrow-left"></i></button>
             <h3>MOVIES</h3>
         </div>
+        
+        <div class="search-container">
+            <i class="fa-solid fa-search search-icon"></i>
+            <input type="text" id="movieSearch" class="search-input" placeholder="Search movies..." onkeyup="searchMovies()">
+        </div>
+        
+        <div class="category-tabs">
+            <button class="cat-tab active" onclick="filterCategory('all')">All</button>
+            <button class="cat-tab" onclick="filterCategory('action')">Action</button>
+            <button class="cat-tab" onclick="filterCategory('romance')">Romance</button>
+            <button class="cat-tab" onclick="filterCategory('horror')">Horror</button>
+        </div>
+        
+        <div class="banner-ad">
+            <span class="ad-label">AD</span>
+            <p>Premium Subscription - No Ads!</p>
+        </div>
+        
         <div class="video-grid" id="moviesCatalogueGrid"></div>
     </div>
 
     <div id="sidebarOverlay" onclick="closeSidebars()"></div>
+
     <div class="less-feed" id="mainFeed"></div>
 
-    <script src="data.js"></script> 
-    <script src="app.js"></script>
+    <div id="moviePlayerContainer" class="movie-player-overlay" style="display: none;">
+        <div class="movie-top-bar">
+            <button onclick="closeMoviePlayer()" class="movie-back-btn"><i class="fa-solid fa-arrow-left"></i> Back</button>
+            <span class="movie-logo">less<span>.</span></span>
+        </div>
+        <div class="movie-player-wrapper" id="movieWrapper"></div>
+        <div class="movie-details" id="movieDetailsBox"></div>
+    </div>
+
+    <div id="actorModal" class="actor-modal" style="display: none;">
+        <div class="actor-modal-content">
+            <button class="actor-close" onclick="closeActorModal()"><i class="fa-solid fa-xmark"></i></button>
+            <div class="actor-header">
+                <img id="actorModalImg" src="" alt="Actor" class="actor-modal-img">
+                <div class="actor-info">
+                    <h2 id="actorModalName">Creator</h2>
+                    <p id="actorModalFollowers">0 Followers</p>
+                    <button class="follow-btn" onclick="toggleFollow()"><i class="fa-solid fa-plus"></i> Follow</button>
+                </div>
+            </div>
+            
+            <div class="profile-tabs">
+                <button class="profile-tab active" id="tab-shorts" onclick="renderActorVideos('shorts')">Shorts</button>
+                <button class="profile-tab" id="tab-movie" onclick="renderActorVideos('movie')">Movies</button>
+            </div>
+            
+            <div class="actor-videos">
+                <div class="actor-video-grid" id="actorVideoGrid"></div>
+            </div>
+        </div>
+    </div>
+
+    <div id="adOverlay" class="ad-overlay" style="display: none;">
+        <div class="ad-content-box">
+            <span class="ad-label-big">ADVERTISEMENT</span>
+            <div class="ad-video-container">
+                <iframe id="midrollAdFrame" src="" frameborder="0" allowfullscreen></iframe>
+            </div>
+            <div class="ad-skip">
+                <span id="adSkipTimer">Skip in 5s</span>
+                <button id="adSkipBtn" class="skip-btn" onclick="skipAd()" style="display: none;">Skip Ad</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.plyr.io/3.7.8/plyr.js"></script>
+    <script src="security.js"></script>
+    <script src="auth.js"></script>
+    <script src="raw-data.js"></script> 
+    <script src="ai-manager.js"></script>
+    <script src="movie.js"></script>
+    <script src="engine.js"></script>
 </body>
 </html>
